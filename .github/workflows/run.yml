@@ -1,0 +1,29 @@
+name: Telegram Ofertas
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run script
+        env:
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          GROUP_USERNAME: ${{ secrets.GROUP_USERNAME }}
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+        run: python telegram_to_sheets.py
